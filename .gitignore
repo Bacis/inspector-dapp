@@ -1,44 +1,38 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ML directory exclusions
+ML/**/*.csv
+ML/**/*.safetensors
+ML/**/*.bin
+ML/**/*.json
+ML/**/results/
+ML/**/logs/
+ML/**/fine_tuned_model/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Python virtual environment
+ML/.venv/
+.venv/
+venv/
+ENV/
 
-# testing
-/coverage
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
 
-# next.js
-/.next/
-/out/
+# Environment variables
+.env
+ML/.env
+ML/myenv
 
-# production
-/build
-/local_model
-/venv
+# IDE settings
+.vscode/
+.idea/
 
-# misc
+# OS generated files
 .DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-certificates
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+model.safetensors
