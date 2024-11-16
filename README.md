@@ -16,4 +16,4 @@ Additionally, Shield comes equipped with all the connections to make its differe
 
 ## Technologies
 
-This project is mostly built on Open Source technologies, but technology from private Companies has been used (Privy, Hyperbolic, Phala Labs).
+This project is mostly built on Open Source technologies, but technology from private Companies has been used (Privy, Hyperbolic, Phala Network).
