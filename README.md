@@ -1,6 +1,6 @@
 # Welcome to Shield!
 
-**Shield** has the ambitious goal of providing a strong layer of security against fraudulent or malicious intents in the Crypto world. It is strictly designed and built according to the principles of **privacy** and **security**. Through secure Machine Learning models, it parses in real time the user's navigation experience and promptly warns for potential Crypto-related scams.
+**Shield** has the ambitious goal of providing a strong layer of security against fraudulent or malicious intents in the Crypto world. It is strictly designed and built according to the principles of **privacy** and **security**. Through secure Machine Learning models, it parses in real time the user's navigation experience and promptly warns for potential Crypto-related scams. Furthermore, for any correct potential scam identification (and thus contribution to our scam dataset), our users will get rewarded with Shield's token.
 
 
 # Architecture
