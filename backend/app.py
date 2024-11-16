@@ -47,9 +47,12 @@ def scan_screen():
         # Filter the results to only those with confidence > 0.5 and length > 5
         filtered_results = [result for result in results if result['confidence'] > 0.5 and len(result['text'].split(' ')) > 5]
 
-        # Fix: Convert the texts to a proper query string format
-        texts = [result['text'] for result in filtered_results]
-        response = requests.post("http://0.0.0.0:3000/predict", json=texts)
+        # Fix: Send texts in the correct format
+        payload = {
+            "texts": [result['text'] for result in filtered_results]
+        }
+        
+        response = requests.post("http://0.0.0.0:3000/predict", json=payload)
 
         return jsonify(response.json())
         
