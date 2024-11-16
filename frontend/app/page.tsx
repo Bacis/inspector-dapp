@@ -140,6 +140,8 @@ export default function Page() {
 
   return (
     <div className="flex h-screen">
+      <InstallPrompt />
+      {/* <PushNotificationManager /> */}
       <div className="flex-1 bg-[#676FFF] flex justify-center items-center">
         <svg
           width="100"
