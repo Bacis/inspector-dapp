@@ -4,7 +4,8 @@
 
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
-ARG PYTHON_VERSION=3.10.12
+# Pull this image separately first, sometimes there are conflicts and it fails
+ARG PYTHON_VERSION=3.12.7
 FROM python:${PYTHON_VERSION}-slim AS base
 
 # Prevents Python from writing pyc files.

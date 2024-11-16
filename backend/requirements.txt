@@ -89,3 +89,7 @@ websockets==13.0.1
 yarl==1.11.1
 flask==3.0.2
 flask-cors==4.0.0
+anyio==4.6.2.post1
+fastapi==0.115.5 
+sniffio==1.3.1 
+starlette==0.41.2

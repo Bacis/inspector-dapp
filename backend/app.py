@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 CORS(app, resources={
     r"/api/*": {
-        "origins": ["http://localhost:3000"]  # Allow React dev server
+        "origins": ["http://localhost:4000"]  # Allow React dev server
     }
 })
 
@@ -42,7 +42,13 @@ def scan_screen():
             }
             for block in text_blocks
         ]
+
+        # Filter the results to only those with confidence > 0.5 and length > 5
+        filtered_results = [result for result in results if result['confidence'] > 0.5 and len(result['text']) > 5]
+
+        # Return the filtered results
         
+
         return jsonify({
             'success': True,
             'data': results
