@@ -15,6 +15,9 @@ export default function DashboardPage() {
     setIsEnabled(checked);
   }
 
+  if (data) {
+  }
+
   return (
     <SidebarFrame>
       <SidebarHeader />

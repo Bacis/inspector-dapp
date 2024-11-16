@@ -9,6 +9,7 @@ interface OCRResponse {
     predictions: Prediction[];
   };
   error?: string;
+  image: string;
 }
 
 // Updated result type to match what we'll provide to components
@@ -17,8 +18,16 @@ interface OCRResult {
   confidence: number;
 }
 
+interface ResultWithImage {
+  suspicious: boolean;
+  image: string;
+}
+
 export function useOCRPolling(isEnabled: boolean) {
-  const [data, setData] = useState<OCRResult[]>([]);
+  const [data, setData] = useState<ResultWithImage>({
+    suspicious: false,
+    image: "",
+  });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -51,7 +60,11 @@ export function useOCRPolling(isEnabled: boolean) {
             (result) => result.confidence >= 0.8
           );
 
-          setData(filteredData);
+          setData({
+            suspicious: filteredData.length > 0,
+            image: result.image,
+          });
+
           setError(null);
         } catch (err) {
           if (!isSubscribed) break;

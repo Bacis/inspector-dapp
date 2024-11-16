@@ -1,14 +1,7 @@
 import { Card } from "./ui/card";
 
 interface OCRResult {
-  text: string;
-  coordinates: {
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-  };
-  confidence: number;
+  predictions: [string, number][];
 }
 
 interface DashboardContentProps {
