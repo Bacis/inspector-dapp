@@ -1,6 +1,8 @@
 import os
 from dstack_sdk import AsyncTappdClient, DeriveKeyResponse, TdxQuoteResponse
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
+
 # from fastapi.security import OAuth2PasswordBearer
 import numpy as np
 from utils import classify_text
@@ -10,6 +12,14 @@ class TextRequest(BaseModel):
     texts: list[str]
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3001"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():
@@ -36,4 +46,5 @@ async def tdxquote():
 async def predict(request: TextRequest):
     print("text", request.texts)
     predictions = classify_text(request.texts)
+    print("predictions", predictions)
     return {"predictions": predictions}

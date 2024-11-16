@@ -22,6 +22,18 @@ CORS(app, resources={
 # Initialize OCR
 ocr = ScreenOCR()
 
+@app.route('/api/derivekey')
+async def derivekey():
+    request = requests.get("http://0.0.0.0:3000/derivekey")
+    response = request.json()
+    return {"deriveKey": response.get("deriveKey", "test")}
+
+@app.route('/api/derivekey')
+async def derivekey():
+    request = requests.get("http://0.0.0.0:3000/derivekey")
+    response = request.json()
+    return {"deriveKey": response.get("deriveKey", "test")}
+
 @app.route('/api/scan-screen', methods=['GET'])
 def scan_screen():
     """
@@ -40,6 +52,8 @@ def scan_screen():
        # Convert RGBA to RGB before saving
         if screenshot.mode == 'RGBA':
             screenshot = screenshot.convert('RGB')
+
+        
         # Convert TextBlocks to dictionary format
         results = [
             {
@@ -55,21 +69,28 @@ def scan_screen():
             for block in text_blocks
         ]
 
-        # Filter the results to only those with confidence > 0.5 and length > 5
-        filtered_results = [result for result in results if result['confidence'] > 0.5 and len(result['text'].split(' ')) > 5]
-
         buffer = io.BytesIO()
         screenshot.save(buffer, format="JPEG", quality=70, optimize=True)
         encoded_screenshot = base64.b64encode(buffer.getvalue()).decode()
+
+        # Filter the results to only those with confidence > 0.5 and length > 5
+        filtered_results = [result for result in results if result['confidence'] > 0.5 and len(result['text'].split(' ')) > 7]
+
+        # Fix: Send texts in the correct format
+        payload = {
+            "texts": [result['text'] for result in filtered_results]
+        }
+        response = requests.post("http://0.0.0.0:3000/predict", json=payload)
+
+        predictions_json = response.json()
+        predictions = predictions_json.get('predictions', [])
+
 
         # Prepare response
         return jsonify({
             'success': True,
             'data': {
-                'predictions': [
-                    [result['text'], result['confidence']] 
-                    for result in filtered_results
-                ]
+                'predictions': predictions
             },
             'screenshot': encoded_screenshot
         })

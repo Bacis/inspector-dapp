@@ -59,7 +59,7 @@ export function SidebarNavigation() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <button onClick={() => router.push("/security")}>
+              <button onClick={() => router.push("/dashboard/security")}>
                 <EarthLock />
                 <span>Security</span>
               </button>
