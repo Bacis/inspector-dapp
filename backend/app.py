@@ -3,6 +3,9 @@ from flask_cors import CORS
 from ocr import ScreenOCR
 import logging
 import requests
+from PIL import ImageGrab, Image
+import base64
+import io
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -28,7 +31,15 @@ def scan_screen():
     try:
         # Scan screen using OCR
         text_blocks = ocr.scan_screen()
-        
+        screenshot = ImageGrab.grab()
+        max_dimension = 800  # Adjust this value based on your needs
+        ratio = min(max_dimension / screenshot.width, max_dimension / screenshot.height)
+        new_size = (int(screenshot.width * ratio), int(screenshot.height * ratio))
+        screenshot = screenshot.resize(new_size, Image.Resampling.LANCZOS)
+
+       # Convert RGBA to RGB before saving
+        if screenshot.mode == 'RGBA':
+            screenshot = screenshot.convert('RGB')
         # Convert TextBlocks to dictionary format
         results = [
             {
@@ -47,15 +58,21 @@ def scan_screen():
         # Filter the results to only those with confidence > 0.5 and length > 5
         filtered_results = [result for result in results if result['confidence'] > 0.5 and len(result['text'].split(' ')) > 5]
 
-        # Fix: Send texts in the correct format
-        payload = {
-            "texts": [result['text'] for result in filtered_results]
-        }
-        
-        response = requests.post("http://0.0.0.0:3000/predict", json=payload)
+        buffer = io.BytesIO()
+        screenshot.save(buffer, format="JPEG", quality=70, optimize=True)
+        encoded_screenshot = base64.b64encode(buffer.getvalue()).decode()
 
-        return jsonify(response.json())
-        
+        # Prepare response
+        return jsonify({
+            'success': True,
+            'data': {
+                'predictions': [
+                    [result['text'], result['confidence']] 
+                    for result in filtered_results
+                ]
+            },
+            'screenshot': encoded_screenshot
+        })
     except Exception as e:
         logger.error(f"Error during screen scan: {str(e)}")
         return jsonify({

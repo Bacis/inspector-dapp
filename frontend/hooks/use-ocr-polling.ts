@@ -9,7 +9,7 @@ interface OCRResponse {
     predictions: Prediction[];
   };
   error?: string;
-  image: string;
+  screenshot: string; // base64 encoded string
 }
 
 // Updated result type to match what we'll provide to components
@@ -20,13 +20,13 @@ interface OCRResult {
 
 interface ResultWithImage {
   suspicious: boolean;
-  image: string;
+  screenshot: string;
 }
 
 export function useOCRPolling(isEnabled: boolean) {
   const [data, setData] = useState<ResultWithImage>({
     suspicious: false,
-    image: "",
+    screenshot: "",
   });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,16 +36,15 @@ export function useOCRPolling(isEnabled: boolean) {
 
     async function pollOCRData() {
       while (isSubscribed) {
+        console.log("polling for OCR data");
         try {
           setIsLoading(true);
+          console.log("fetching OCR data");
           const response = await fetch("http://127.0.0.1:5001/api/scan-screen");
+          console.log("response is ", response);
           const result: OCRResponse = await response.json();
-
+          console.log("isSubscribed is ", isSubscribed);
           if (!isSubscribed) break;
-
-          if (!result.success) {
-            throw new Error(result.error || "Failed to scan screen");
-          }
 
           // Transform predictions array into OCRResult array
           const transformedData: OCRResult[] = result.data.predictions.map(
@@ -60,9 +59,13 @@ export function useOCRPolling(isEnabled: boolean) {
             (result) => result.confidence >= 0.8
           );
 
+          // Create data URL for the screenshot
+          const decodedScreenshot = `data:image/png;base64,${result.screenshot}`;
+
+          console.log("decodedScreenshot is ", decodedScreenshot);
           setData({
             suspicious: filteredData.length > 0,
-            image: result.image,
+            screenshot: decodedScreenshot,
           });
 
           setError(null);
@@ -72,6 +75,9 @@ export function useOCRPolling(isEnabled: boolean) {
         } finally {
           setIsLoading(false);
         }
+
+        // Add delay between polls
+        await new Promise((resolve) => setTimeout(resolve, 2000)); // 5 second delay
       }
     }
 
