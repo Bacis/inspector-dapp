@@ -36,3 +36,4 @@ ML/myenv
 ehthumbs.db
 Thumbs.db
 model.safetensors
+optimizer.pt

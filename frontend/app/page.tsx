@@ -1,76 +1,76 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import {usePrivy} from '@privy-io/react-auth';
-import { subscribeUser, unsubscribeUser, sendNotification } from './actions'
+import { useState, useEffect } from "react";
+import { usePrivy } from "@privy-io/react-auth";
+import { subscribeUser, unsubscribeUser, sendNotification } from "./actions";
 
 function urlBase64ToUint8Array(base64String: string) {
-  const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding)
-    .replace(/\\-/g, '+')
-    .replace(/_/g, '/')
- 
-  const rawData = window.atob(base64)
-  const outputArray = new Uint8Array(rawData.length)
- 
+    .replace(/\\-/g, "+")
+    .replace(/_/g, "/");
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
   for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i)
+    outputArray[i] = rawData.charCodeAt(i);
   }
-  return outputArray
+  return outputArray;
 }
 
 function PushNotificationManager() {
-  const [isSupported, setIsSupported] = useState(false)
+  const [isSupported, setIsSupported] = useState(false);
   const [subscription, setSubscription] = useState<PushSubscription | null>(
     null
-  )
-  const [message, setMessage] = useState('')
- 
+  );
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      setIsSupported(true)
-      registerServiceWorker()
+    if ("serviceWorker" in navigator && "PushManager" in window) {
+      setIsSupported(true);
+      registerServiceWorker();
     }
-  }, [])
- 
+  }, []);
+
   async function registerServiceWorker() {
-    const registration = await navigator.serviceWorker.register('/sw.js', {
-      scope: '/',
-      updateViaCache: 'none',
-    })
-    const sub = await registration.pushManager.getSubscription()
-    setSubscription(sub)
+    const registration = await navigator.serviceWorker.register("/sw.js", {
+      scope: "/",
+      updateViaCache: "none",
+    });
+    const sub = await registration.pushManager.getSubscription();
+    setSubscription(sub);
   }
- 
+
   async function subscribeToPush() {
-    const registration = await navigator.serviceWorker.ready
+    const registration = await navigator.serviceWorker.ready;
     const sub = await registration.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(
         process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
       ),
-    })
-    setSubscription(sub)
-    await subscribeUser(sub)
+    });
+    setSubscription(sub);
+    await subscribeUser(sub);
   }
- 
+
   async function unsubscribeFromPush() {
-    await subscription?.unsubscribe()
-    setSubscription(null)
-    await unsubscribeUser()
+    await subscription?.unsubscribe();
+    setSubscription(null);
+    await unsubscribeUser();
   }
- 
+
   async function sendTestNotification() {
     if (subscription) {
-      await sendNotification(message)
-      setMessage('')
+      await sendNotification(message);
+      setMessage("");
     }
   }
- 
+
   if (!isSupported) {
-    return <p>Push notifications are not supported in this browser.</p>
+    return <p>Push notifications are not supported in this browser.</p>;
   }
- 
+
   return (
     <div>
       <h3>Push Notifications</h3>
@@ -93,25 +93,25 @@ function PushNotificationManager() {
         </>
       )}
     </div>
-  )
+  );
 }
 
 function InstallPrompt() {
-  const [isIOS, setIsIOS] = useState(false)
-  const [isStandalone, setIsStandalone] = useState(false)
- 
+  const [isIOS, setIsIOS] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
+
   useEffect(() => {
     setIsIOS(
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
-    )
- 
-    setIsStandalone(window.matchMedia('(display-mode: standalone)').matches)
-  }, [])
- 
+    );
+
+    setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
+  }, []);
+
   if (isStandalone) {
-    return null // Don't show install button if already installed
+    return null; // Don't show install button if already installed
   }
- 
+
   return (
     <div>
       <h3>Install App</h3>
@@ -120,39 +120,60 @@ function InstallPrompt() {
         <p>
           To install this app on your iOS device, tap the share button
           <span role="img" aria-label="share icon">
-            {' '}
-            ⎋{' '}
+            {" "}
+            ⎋{" "}
           </span>
           and then &quot;Add to Home Screen&quot;
           <span role="img" aria-label="plus icon">
-            {' '}
-            ➕{' '}
-          </span>.
+            {" "}
+            ➕{" "}
+          </span>
+          .
         </p>
       )}
     </div>
-  )
+  );
 }
- 
+
 export default function Page() {
-  const {connectWallet} = usePrivy();
+  const { connectWallet } = usePrivy();
 
   return (
     <div className="flex h-screen">
       <div className="flex-1 bg-[#676FFF] flex justify-center items-center">
-        <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-star">
+        <svg
+          width="100"
+          height="100"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="feather feather-star"
+        >
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
         </svg>
         <h1 className="text-white text-4xl font-bold">Satriale`s</h1>
       </div>
       <div className="flex-1 flex justify-center items-center bg-white">
-        <button 
-          onClick={() => connectWallet({walletList: ['metamask', 'wallet_connect', "phantom", "coinbase_wallet"]})}
+        <button
+          onClick={() =>
+            connectWallet({
+              walletList: [
+                "metamask",
+                "wallet_connect",
+                "phantom",
+                "coinbase_wallet",
+              ],
+            })
+          }
           className="bg-[#676FFF] text-white py-2 px-4 rounded-lg shadow-md hover:bg-[#5757FF] transition duration-300 text-lg"
         >
           Login
         </button>
       </div>
     </div>
-  )
+  );
 }

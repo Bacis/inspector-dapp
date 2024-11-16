@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import PrivyProvider from "./provider/PrivyProvider";
+import PrivyProvider from "./(assets)/providers/PrivyProvider";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -25,17 +25,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-
-      <html lang="en">
-            
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
-            <PrivyProvider>
-              {children}
-            </PrivyProvider>
-
-          </body>
-      </html>
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <PrivyProvider>{children}</PrivyProvider>
+      </body>
+    </html>
   );
 }
