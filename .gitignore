@@ -41,3 +41,4 @@ local_model/
 .next/
 certificates/
 optimizer.pt
+backend/encrypted_seed.json
