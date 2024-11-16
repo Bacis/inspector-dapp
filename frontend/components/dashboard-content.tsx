@@ -1,12 +1,24 @@
+import { RadialChart } from "@/components/charts/radial";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { ShieldAlert } from "lucide-react";
+import { AlertTriangle, ShieldAlert } from "lucide-react";
 import Image from "next/image";
+import { RadialBarChart } from "recharts";
 
 export function DashboardContent() {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
       <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <div className="aspect-video rounded-xl bg-muted/50" />
+        <div className="aspect-video rounded-xl flex flex-row items-center justify-center gap-6">
+          <div>
+            <AlertTriangle size={24} className="text-red-900" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold">321</h2>
+            <h3 className="text-sm text-muted-foreground">
+              Total Fraudolent Interactions
+            </h3>
+          </div>
+        </div>
         <div className="aspect-video rounded-xl bg-muted/50" />
         <div className="aspect-video rounded-xl bg-muted/50" />
       </div>
