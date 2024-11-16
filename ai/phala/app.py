@@ -1,9 +1,7 @@
 import os
 from dstack_sdk import AsyncTappdClient, DeriveKeyResponse, TdxQuoteResponse
 from fastapi import FastAPI, Depends
-from fastapi.security import OAuth2PasswordBearer
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
+# from fastapi.security import OAuth2PasswordBearer
 import numpy as np
 from utils import classify_text
 

@@ -17,52 +17,46 @@ interface OCRResponse {
   error?: string;
 }
 
-export function useOCRPolling(isEnabled: boolean, interval: number = 4000) {
+export function useOCRPolling(isEnabled: boolean) {
   const [data, setData] = useState<OCRResult[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    let pollTimer: NodeJS.Timeout;
+    let isSubscribed = true;
 
-    async function fetchOCRData() {
-      try {
-        setIsLoading(true);
-        const response = await fetch("http://localhost:5000/api/scan-screen");
-        const result: OCRResponse = await response.json();
+    async function pollOCRData() {
+      while (isSubscribed) {
+        try {
+          setIsLoading(true);
+          const response = await fetch("http://127.0.0.1:5001/api/scan-screen");
+          const result: OCRResponse = await response.json();
 
-        if (!result.success) {
-          throw new Error(result.error || "Failed to scan screen");
+          if (!isSubscribed) break;
+
+          if (!result.success) {
+            throw new Error(result.error || "Failed to scan screen");
+          }
+
+          setData(result.data);
+          setError(null);
+        } catch (err) {
+          if (!isSubscribed) break;
+          setError(err instanceof Error ? err.message : "An error occurred");
+        } finally {
+          setIsLoading(false);
         }
-
-        setData(result.data);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setIsLoading(false);
       }
     }
 
     if (isEnabled) {
-      // Initial fetch
-      fetchOCRData();
-
-      // Set up polling
-      pollTimer = setInterval(fetchOCRData, interval);
+      pollOCRData();
     }
 
-    // Cleanup function
     return () => {
-      if (pollTimer) {
-        clearInterval(pollTimer);
-      }
+      isSubscribed = false;
     };
-  }, [isEnabled, interval]);
+  }, [isEnabled]);
 
-  return {
-    data,
-    error,
-    isLoading,
-  };
+  return { data, error, isLoading };
 }

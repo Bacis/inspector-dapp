@@ -15,7 +15,7 @@ certifi==2024.8.30
 cffi==1.17.1
 charset-normalizer==3.3.2
 ckzg==2.0.1
-coincurve==20.0.0
+# coincurve==20.0.0
 crcmod==1.7
 cryptography==43.0.1
 cytoolz==0.12.3
@@ -87,3 +87,5 @@ urllib3==2.2.3
 web3==7.2.0
 websockets==13.0.1
 yarl==1.11.1
+flask==3.0.2
+flask-cors==4.0.0
