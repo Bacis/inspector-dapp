@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 CORS(app, resources={
     r"/api/*": {
-        "origins": ["http://localhost:4000"]  # Allow React dev server
+        "origins": ["http://localhost:3001"]  # Allow React dev server
     }
 })
 

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { usePrivy } from "@privy-io/react-auth";
-import { subscribeUser, unsubscribeUser, sendNotification } from "./actions";
+import { useRouter } from "next/navigation"; // Import useRouter from next/router
+import { Shield } from "lucide-react";
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -25,6 +26,7 @@ function PushNotificationManager() {
     null
   );
   const [message, setMessage] = useState("");
+  const router = useRouter(); // Initialize useRouter
 
   useEffect(() => {
     if ("serviceWorker" in navigator && "PushManager" in window) {
@@ -136,41 +138,26 @@ function InstallPrompt() {
 }
 
 export default function Page() {
+  const router = useRouter(); // Initialize useRouter
+
   const { connectWallet } = usePrivy();
+
+  async function handleLogin() {
+    await connectWallet({
+      walletList: ["metamask", "wallet_connect", "phantom", "coinbase_wallet"],
+    });
+    // After successful login, push a new route
+    router.push("/dashboard");
+  }
 
   return (
     <div className="flex h-screen">
-      <InstallPrompt />
-      {/* <PushNotificationManager /> */}
       <div className="flex-1 bg-[#676FFF] flex justify-center items-center">
-        <svg
-          width="100"
-          height="100"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-star"
-        >
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-        </svg>
-        <h1 className="text-white text-4xl font-bold">Satriale`s</h1>
+        <Shield size={100} className="text-white" />
       </div>
       <div className="flex-1 flex justify-center items-center bg-white">
         <button
-          onClick={() =>
-            connectWallet({
-              walletList: [
-                "metamask",
-                "wallet_connect",
-                "phantom",
-                "coinbase_wallet",
-              ],
-            })
-          }
+          onClick={handleLogin}
           className="bg-[#676FFF] text-white py-2 px-4 rounded-lg shadow-md hover:bg-[#5757FF] transition duration-300 text-lg"
         >
           Login
