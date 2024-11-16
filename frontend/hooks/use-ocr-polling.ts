@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 
-interface OCRResult {
-  text: string;
-  coordinates: {
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-  };
-  confidence: number;
-}
+// New type for predictions array
+type Prediction = [string, number]; // [text, confidence]
 
 interface OCRResponse {
   success: boolean;
-  data: OCRResult[];
+  data: {
+    predictions: Prediction[];
+  };
   error?: string;
+}
+
+// Updated result type to match what we'll provide to components
+interface OCRResult {
+  text: string;
+  confidence: number;
 }
 
 export function useOCRPolling(isEnabled: boolean) {
@@ -38,7 +38,20 @@ export function useOCRPolling(isEnabled: boolean) {
             throw new Error(result.error || "Failed to scan screen");
           }
 
-          setData(result.data);
+          // Transform predictions array into OCRResult array
+          const transformedData: OCRResult[] = result.data.predictions.map(
+            ([text, confidence]) => ({
+              text,
+              confidence,
+            })
+          );
+
+          // Filter out any predictions with confidence less than 0.8
+          const filteredData = transformedData.filter(
+            (result) => result.confidence >= 0.8
+          );
+
+          setData(filteredData);
           setError(null);
         } catch (err) {
           if (!isSubscribed) break;

@@ -49,27 +49,9 @@ def scan_screen():
 
         # Fix: Convert the texts to a proper query string format
         texts = [result['text'] for result in filtered_results]
+        response = requests.post("http://0.0.0.0:3000/predict", json=texts)
 
-        # Create a proper JSON structure
-        payload = {
-            "texts": texts
-        }
-        
-        try:
-            response = requests.post("http://0.0.0.0:3000/predict", json=payload)
-            response.raise_for_status()  # Raises an HTTPError for bad responses
-            
-            return jsonify({
-                'success': True,
-                'data': response.json()
-            })
-            
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Error calling prediction service: {str(e)}")
-            return jsonify({
-                'success': False,
-                'error': f"Prediction service error: {str(e)}"
-            }), 500
+        return jsonify(response.json())
         
     except Exception as e:
         logger.error(f"Error during screen scan: {str(e)}")
