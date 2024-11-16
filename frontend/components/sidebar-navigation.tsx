@@ -30,7 +30,7 @@ export function SidebarNavigation() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <button onClick={() => router.push("/protection")}>
+              <button onClick={() => router.push("/dashboard/protection")}>
                 <Siren />
                 <span>Protection</span>
               </button>

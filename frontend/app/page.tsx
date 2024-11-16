@@ -147,7 +147,7 @@ export default function Page() {
       walletList: ["metamask", "wallet_connect", "phantom", "coinbase_wallet"],
     });
     // After successful login, push a new route
-    router.push("/dashboard");
+    router.push("/dashboard/protection");
   }
 
   return (
