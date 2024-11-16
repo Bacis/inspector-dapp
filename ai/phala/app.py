@@ -45,6 +45,8 @@ async def tdxquote():
 @app.post("/predict")
 async def predict(request: TextRequest):
     print("text", request.texts)
+    if len(request.texts) == 0:
+        return {"predictions": []}
     predictions = classify_text(request.texts)
     print("predictions", predictions)
     return {"predictions": predictions}
