@@ -4,6 +4,10 @@ from fastapi import FastAPI, Depends
 # from fastapi.security import OAuth2PasswordBearer
 import numpy as np
 from utils import classify_text
+from pydantic import BaseModel
+
+class TextRequest(BaseModel):
+    texts: list[str]
 
 app = FastAPI()
 
@@ -28,7 +32,8 @@ async def tdxquote():
     assert isinstance(tdxQuote, TdxQuoteResponse)
     return {"tdxQuote": tdxQuote}
 
-@app.get("/predict")
-async def predict(text: str):
-    prediction = classify_text(text)
-    return {"prediction": prediction}
+@app.post("/predict")
+async def predict(request: TextRequest):
+    print("text", request.texts)
+    predictions = classify_text(request.texts)
+    return {"predictions": predictions}
