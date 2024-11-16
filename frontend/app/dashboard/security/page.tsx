@@ -23,7 +23,7 @@ export default function PrivacyPage() {
     Promise.all([
       fetch("http://localhost:3000/tdxquote")
         .then((res) => res.json())
-        .then((data) => setTdxquote(data.tdxQuote)),
+        .then((data) => setTdxquote(data.tdxQuote.quote)),
       fetch("http://localhost:3000/derivekey")
         .then((res) => res.json())
         .then((data) => setDeriveKey(data.deriveKey)),
@@ -54,11 +54,14 @@ export default function PrivacyPage() {
         >
           <Copy />
         </Button>
-        <Input
-          value={isLoading ? "Loading..." : tdxquote}
-          readOnly
-          className="w-full border-none mx-4 bg-transparent"
-        />
+        <div className="relative flex-1 mx-4">
+          <Input
+            value={isLoading ? "Loading..." : tdxquote}
+            readOnly
+            className="w-full border-none bg-transparent pr-12 text-ellipsis"
+          />
+          <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-muted to-transparent" />
+        </div>
       </div>
       <h3 className="text-lg font-bold mt-4">Derive Key</h3>
       <div className="w-[800px] h-[80px] bg-muted rounded-3xl mt-4 flex items-center justify-start px-6">
@@ -69,11 +72,14 @@ export default function PrivacyPage() {
         >
           <Copy />
         </Button>
-        <Input
-          value={isLoading ? "Loading..." : deriveKey}
-          readOnly
-          className="w-full border-none mx-4 bg-transparent"
-        />
+        <div className="relative flex-1 mx-4">
+          <Input
+            value={isLoading ? "Loading..." : deriveKey}
+            readOnly
+            className="w-full border-none bg-transparent pr-12 text-ellipsis"
+          />
+          <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-muted to-transparent" />
+        </div>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { DashboardContent } from "@/components/dashboard-content";
 import { Switch } from "@/components/ui/switch";
 import { useOCRPolling } from "@/hooks/use-ocr-polling";
 import { useEffect, useState } from "react";
+import { Eye, EyeClosed, EyeOff } from "lucide-react";
 
 export default function DashboardBody() {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -24,10 +25,14 @@ export default function DashboardBody() {
     <>
       <div className="ml-6 mt-2 space-y-2">
         <div className="flex items-center gap-2">
+          <div className="transition-opacity duration-300">
+            {isEnabled ? (
+              <Eye className="h-5 w-5 text-primary animate-in fade-in" />
+            ) : (
+              <EyeClosed className="h-5 w-5 text-muted-foreground animate-in fade-in" />
+            )}
+          </div>
           <Switch checked={isEnabled} onCheckedChange={handleSwitchChange} />
-          <span className="text-sm text-muted-foreground">
-            {isEnabled ? "OCR Scanning Active" : "OCR Scanning Inactive"}
-          </span>
         </div>
         {isLoading && (
           <p className="text-sm text-muted-foreground">Scanning...</p>

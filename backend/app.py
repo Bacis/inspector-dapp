@@ -22,17 +22,6 @@ CORS(app, resources={
 # Initialize OCR
 ocr = ScreenOCR()
 
-@app.route('/api/derivekey')
-async def derivekey():
-    request = requests.get("http://0.0.0.0:3000/derivekey")
-    response = request.json()
-    return {"deriveKey": response.get("deriveKey", "test")}
-
-@app.route('/api/derivekey')
-async def derivekey():
-    request = requests.get("http://0.0.0.0:3000/derivekey")
-    response = request.json()
-    return {"deriveKey": response.get("deriveKey", "test")}
 
 @app.route('/api/scan-screen', methods=['GET'])
 def scan_screen():

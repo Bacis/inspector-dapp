@@ -152,13 +152,14 @@ export default function Page() {
 
   return (
     <div className="flex h-screen">
-      <div className="flex-1 bg-[#676FFF] flex justify-center items-center">
+      <div className="flex-1 flex-col bg-black flex justify-center items-center">
         <Shield size={100} className="text-white" />
+        <h1 className="text-white text-3xl font-bold pt-4">Shield</h1>
       </div>
       <div className="flex-1 flex justify-center items-center bg-white">
         <button
           onClick={handleLogin}
-          className="bg-[#676FFF] text-white py-2 px-4 rounded-lg shadow-md hover:bg-[#5757FF] transition duration-300 text-lg"
+          className="bg-black text-white py-2 px-4 rounded-lg shadow-md hover:bg-[#5757FF] transition duration-300 text-lg"
         >
           Login
         </button>
