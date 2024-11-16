@@ -13,16 +13,8 @@ class TextBlock:
 class ScreenOCR:
     def __init__(self, reader: easyocr.Reader = None):
         self.reader = reader if reader else easyocr.Reader(['en'])
-        self.image = None
 
-    @property
-    def image(self):
-        return self.image
-
-    @image.setter
-    def image(self, value):
-        self.image = value
-
+            
     def capture_screen(self) -> 'PIL.Image':
         """Capture the entire screen."""
         return ImageGrab.grab()
@@ -122,8 +114,8 @@ class ScreenOCR:
         Returns:
             List of TextBlock objects containing text and coordinates
         """
-        self.image = self.capture_screen()
-        return self.process_image(self.image)
+        screenshot = self.capture_screen()
+        return self.process_image(screenshot)
 
 def main():
     # Example usage
