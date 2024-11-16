@@ -36,3 +36,7 @@ ML/myenv
 ehthumbs.db
 Thumbs.db
 model.safetensors
+node_modules/
+local_model/
+.next/
+certificates/
